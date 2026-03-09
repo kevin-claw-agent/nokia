@@ -1,5 +1,5 @@
-import * as THREE from 'https://esm.sh/three@0.164.1';
-import { OrbitControls } from 'https://esm.sh/three@0.164.1/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 function addBlock(target, material, width, height, x, y, depth = 0.08) {
   const part = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), material);

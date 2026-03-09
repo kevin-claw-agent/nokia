@@ -1,43 +1,35 @@
 # Nokia 经典手机（React + Tailwind + Three.js）
 
-一个使用现代前端组织方式重构的 Nokia 经典款示例：
-- **React**：负责 UI/HUD 状态与组件结构
-- **Tailwind CSS**：负责界面样式
-- **Three.js**：负责 3D 建模与交互
+已切换为标准 **npm + Vite** 工作流。
 
-## 功能
+## 技术栈
 
-- 鼠标拖拽旋转手机模型（OrbitControls）
-- 点击 3D 数字按键输入号码（Raycaster）
-- 手机屏幕 Canvas 贴图与 HUD 输入值同步
-- 场景左侧包含几何体拼接的 `NOKIA` 文字建模
+- React 18
+- Vite 5
+- Tailwind CSS 3（PostCSS）
+- Three.js
 
 ## 项目结构
 
-- `src/app.js`：React 应用入口与 HUD 组件
-- `src/three/nokiaScene.js`：Three.js 场景与建模逻辑（模块化）
-- `src/style.css`：基础全屏样式
+- `src/main.js`：Vite 入口
+- `src/App.js`：React HUD 与状态管理
+- `src/three/nokiaScene.js`：Three.js 场景与建模逻辑
+- `src/style.css`：Tailwind 入口与基础样式
 
-## 本地运行
-
-不需要本地安装依赖，只需静态文件服务：
-
-```bash
-npx serve . -l 4173
-```
-
-或：
+## 开发
 
 ```bash
-python3 -m http.server 4173
+npm install
+npm run dev
 ```
 
-然后访问 `http://localhost:4173`。
+## 构建
 
-## GitHub Pages 部署
+```bash
+npm run build
+npm run preview
+```
 
-仓库包含 `.github/workflows/deploy.yml`，推送到 `main` 会自动部署到 GitHub Pages。
+## GitHub Pages
 
-> 说明：
-> - React / Tailwind / Three.js 通过 CDN 加载，便于零构建静态部署。
-> - 如需生产级构建（打包优化、类型检查、Tailwind 编译），可下一步切换到 Vite + npm 工作流。
+保留 `.github/workflows/deploy.yml` 自动部署流程；Vite `base: './'` 已适配 GitHub Pages 子路径部署。
