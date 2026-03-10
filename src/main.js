@@ -55,7 +55,7 @@ function useBackgroundThree(canvasRef, progress, darkMode) {
       new THREE.CylinderGeometry(0.012, 0.012, 16, 16),
       new THREE.MeshStandardMaterial({ color: darkMode ? '#3d4f79' : '#8597bd' })
     );
-    timelineLine.position.set(0, 6.2, -1.4);
+    timelineLine.position.set(-2.05, 6.2, -1.4);
     scene.add(timelineLine);
 
     const rail = new THREE.Group();
@@ -72,7 +72,7 @@ function useBackgroundThree(canvasRef, progress, darkMode) {
         new THREE.SphereGeometry(0.06, 16, 16),
         new THREE.MeshStandardMaterial({ color: darkMode ? '#7084b5' : '#64748b' })
       );
-      dot.position.set(0, idx * spacing, -1.4);
+      dot.position.set(-2.05, idx * spacing, -1.4);
       rail.add(dot);
     });
     scene.add(rail);
@@ -82,7 +82,7 @@ function useBackgroundThree(canvasRef, progress, darkMode) {
       new THREE.MeshStandardMaterial({ color: darkMode ? '#e5f0ff' : '#111827' })
     );
     cursor.rotation.x = Math.PI / 2;
-    cursor.position.set(0, 0, -1.4);
+    cursor.position.set(-2.05, 0, -1.4);
     scene.add(cursor);
 
     const onResize = () => {
@@ -99,7 +99,7 @@ function useBackgroundThree(canvasRef, progress, darkMode) {
     let raf = 0;
     const tick = () => {
       const p = progressRef.current;
-      rail.position.y = -p * spacing;
+      rail.position.y = p * spacing;
       cursor.position.y = p * spacing;
 
       deviceMeshes.forEach((mesh, idx) => {
@@ -114,7 +114,7 @@ function useBackgroundThree(canvasRef, progress, darkMode) {
           mesh.rotation.x = Math.PI * 0.2 * back;
         }
 
-        mesh.rotation.y = Math.PI * 0.06 * local;
+        mesh.rotation.y = -Math.PI * 0.06 * local;
         mesh.position.z = -Math.abs(local) * 0.25;
       });
 
@@ -165,6 +165,11 @@ function App() {
     setCardAnimKey((k) => k + 1);
   }, [activeIndex]);
 
+
+  const phase = progress - activeIndex;
+  const leftMotionY = -phase * 26;
+  const leftMotionGlow = 1 - Math.min(Math.abs(phase), 1) * 0.35;
+
   return React.createElement(
     'div',
     { className: 'page' },
@@ -181,7 +186,7 @@ function App() {
       { className: 'layout overlay' },
       React.createElement(
         'section',
-        { className: 'spec-left' },
+        { className: 'spec-left', style: { transform: `translateY(${leftMotionY}px)`, opacity: leftMotionGlow } },
         React.createElement('p', { className: 'small-caption' }, `${current.year} · ${current.era}`),
         React.createElement('h1', { key: `title-${cardAnimKey}`, className: 'model-title fade-card' }, current.name),
         React.createElement(
@@ -194,6 +199,26 @@ function App() {
             )
           )
         )
+      ),
+
+
+      React.createElement(
+        'section',
+        { className: 'timeline-rail-wrap' },
+        React.createElement('div', { className: 'timeline-rail-line' }),
+        DEVICES.map((item, idx) =>
+          React.createElement('div', {
+            key: `tick-${item.id}`,
+            className: `timeline-tick ${idx === activeIndex ? 'active' : ''}`,
+            style: { top: `${(idx / (DEVICES.length - 1)) * 100}%` }
+          },
+            React.createElement('span', { className: 'tick-label' }, `${item.year}`)
+          )
+        ),
+        React.createElement('div', {
+          className: 'timeline-runner',
+          style: { top: `${(progress / (DEVICES.length - 1)) * 100}%` }
+        })
       ),
 
       React.createElement(
